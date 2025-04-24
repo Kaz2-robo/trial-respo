@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To: Mara</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e0bbff, #b388eb);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+  
+    h1, h2 {
+      color: #6a0dad;
+      margin: 20px;
+    }
+  
+    #countdown {
+      font-size: 2.5rem;
+      background-color: #f3e5f5;
+      padding: 15px 25px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(106, 13, 173, 0.2);
+      margin-bottom: 40px;
+      color: #4a148c;
+    }
+  
+    #envelope {
+      display: none;
+      width: 160px;
+      height: 160px;
+      background: #d1c4e9;
+      position: relative;
+      border-radius: 50% 50% 0 0;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+  
+    #envelope::before {
+      content: '💌';
+      font-size: 5rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulseEmoji 1.5s infinite;
+      color: #7e57c2;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    }
+  
+    @keyframes pulseEmoji {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        text-shadow: 0 0 25px rgba(255, 255, 255, 1);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+      }
+    }
+  
+    #greetingCard {
+      display: none;
+      background: #f8f0ff;
+      padding: 30px;
+      border-radius: 25px;
+      max-width: 800px;
+      text-align: center;
+      animation: zoomIn 1s ease-in-out;
+      box-shadow: 0 8px 30px rgba(106, 13, 173, 0.2);
+    }
+  
+    #greetingCard h1 {
+      font-size: 3rem;
+      color: #8e24aa;
+      margin-bottom: 10px;
+    }
+  
+    #message {
+      font-size: 1.3rem;
+      margin: 20px 0;
+      color: #4e2a84;
+    }
+  
+    .photos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+  
+    .photos img {
+      width: 140px;
+      height: 140px;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(128, 0, 128, 0.2);
+      animation: float 4s ease-in-out infinite;
+    }
+  
+    @keyframes float {
+      0% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.05); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+  
+    .photos img:nth-child(2) { animation-delay: 0.5s; }
+    .photos img:nth-child(3) { animation-delay: 1s; }
+    .photos img:nth-child(4) { animation-delay: 1.5s; }
+    .photos img:nth-child(5) { animation-delay: 2s; }
+  
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <h2>Counting down to your special day!!!</h2>
+  <div id="countdown">Loading...</div>
+ 
+  
+  <div id="envelope" onclick="openEnvelope()"></div>
+
+  <div id="greetingCard">
+    <h1>Happy 20th Birthday, Mara 💖</h1>
+    <div id="message">
+      As you begin a new chapter of your life, please keep in mind that as life goes on new set of experience, achievement, happiness, sacrifices, and challenges will go by. Im just gonna wish you a happy and meaningful birthday, and like I always say to you "andito lang ako lagi sa tabi tabi if you need me im one call away".
+    </div>
+    <div class="photos">
+      <img src="image ni Bani/Image ni Mara 1.jpeg" alt="Pic1">
+      <img src="image ni Bani/Image ni Mara 2.jpeg" alt="Pic2">
+      <img src="image ni Bani/Image ni Mara 3.jpeg" alt="Pic3">
+      <img src="image ni Bani/Image ni Mara 4.jpeg" alt="Pic4">
+      <img src="image ni Bani/Image ni Mara 5.jpeg" alt="Pic5">
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <canvas id="confetti"></canvas>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    const targetDate = new Date("2025-04-24T00:00:00").getTime();
+    const countdownEl = document.getElementById("countdown");
+    const envelopeEl = document.getElementById("envelope");
+    const greetingCardEl = document.getElementById("greetingCard");
+  
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+  
+      if (distance > 0) {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        clearInterval(timer);
+        countdownEl.style.display = "none";
+        envelopeEl.style.display = "block";
+      }
+    }, 1000);
+  
+    function openEnvelope() {
+      envelopeEl.style.display = "none";
+      greetingCardEl.style.display = "block";
+      startConfetti();
+    }
+  
+    
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let confetti = [];
+  
+    function startConfetti() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      confetti = [];
+  
+      for (let i = 0; i < 250; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 6 + 3,
+          d: Math.random() * 40 + 10,
+          color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+          tilt: Math.random() * 20 - 10,
+          tiltAngle: 0,
+          tiltAngleIncrement: Math.random() * 0.1 + 0.05,
+          vx: Math.random() * 1 - 0.5,
+          vy: Math.random() * 2 + 1.5
+        });
+      }
+  
+      requestAnimationFrame(drawConfetti);
+    }
+  
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.tiltAngle += c.tiltAngleIncrement;
+        c.tilt = Math.sin(c.tiltAngle) * 10;
+  
+        if (c.y > canvas.height || c.x < 0 || c.x > canvas.width) {
+          c.x = Math.random() * canvas.width;
+          c.y = -10;
+        }
+  
+        ctx.beginPath();
+        ctx.fillStyle = c.color;
+        ctx.ellipse(c.x + c.tilt, c.y, c.r, c.r * 0.5, c.tiltAngle, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+  
+      requestAnimationFrame(drawConfetti);
+    }
+  </script>  
+  
+</body>
+</html>
